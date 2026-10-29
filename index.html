@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer"><meta http-equiv="Cache-Control" content="no-store">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mXAAczPilx3ju87tWODrspgZkVA7g3qIW/Yb8Jxb4bc='; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>X1Suite Withings callback</title><style>body{font:17px system-ui;max-width:40rem;margin:12vh auto;padding:1.5rem;background:#17191b;color:#eceeee}a{color:#9ac0b1}</style></head>
+<body><h1>X1Suite · Withings</h1><p id="status">OAuth callback ready. Start Connect Withings in X1Suite to sign in.</p>
+<p><a id="continue" hidden>Continue to X1Suite</a></p><p>This page uses no analytics or third-party scripts and does not persist codes. Token exchange happens on your PC.</p>
+<script>(() => {
+  const incoming = new URLSearchParams(location.search);
+  const allowed = new URLSearchParams();
+  for (const key of ['code', 'state', 'error', 'error_description']) {
+    for (const value of incoming.getAll(key)) allowed.append(key, value);
+  }
+  history.replaceState(null, '', location.pathname);
+  if (!allowed.has('state') || (!allowed.has('code') && !allowed.has('error'))) return;
+  const target = 'http://127.0.0.1:8765/withings/callback?' + allowed.toString();
+  const link = document.getElementById('continue');
+  link.href = target;
+  link.hidden = false;
+  document.getElementById('status').textContent = 'Returning to X1Suite on this computer. Keep its login window open.';
+  location.replace(target);
+})();</script></body></html>
